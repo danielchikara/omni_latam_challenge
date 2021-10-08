@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -75,8 +76,12 @@ WSGI_APPLICATION = 'omnilatam_ecommerce.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': 'ec2-54-204-148-110.compute-1.amazonaws.com',
+        'NAME': 'd9b9dg0btsgoaq',
+        'USER': 'wntvdtlshtgews',
+        'PASSWORD': '7954f580e4e9161e9fe2993948e742099edb0397426c4c70d4e5a017a216d783',
+        'PORT': '5432',
     }
 }
 
@@ -123,3 +128,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#AUTHENTICATION_EMAIL
+AUTH_USER_MODEL =  'api.User'
