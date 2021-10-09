@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
+    'rest_framework.authtoken',
     'api',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,6 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  # <-- And here
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -77,11 +85,12 @@ WSGI_APPLICATION = 'omnilatam_ecommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': 'ec2-54-204-148-110.compute-1.amazonaws.com',
-        'NAME': 'd9b9dg0btsgoaq',
-        'USER': 'wntvdtlshtgews',
-        'PASSWORD': '7954f580e4e9161e9fe2993948e742099edb0397426c4c70d4e5a017a216d783',
-        'PORT': '5432',
+        'HOST': 'localhost',
+        'NAME': 'Test_omnilam_ecommerce',
+        'USER': 'postgres',
+        'PASSWORD': 'angelesfuimos123',
+        'PORT': '5433',
+
     }
 }
 
@@ -108,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-us'
 
 TIME_ZONE = 'UTC'
 
@@ -129,5 +138,5 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#AUTHENTICATION_EMAIL
-AUTH_USER_MODEL =  'api.User'
+# AUTHENTICATION_EMAIL
+AUTH_USER_MODEL = 'api.User'

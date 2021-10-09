@@ -25,7 +25,6 @@ class User(AbstractUser):
     username = None
     email = models.EmailField('email address',  unique=True, db_index=True)
     USERNAME_FIELD = 'email'
-    date_birth = models.DateField()
     REQUIRED_FIELDS = []
     objects = SocialUserManager()
 
