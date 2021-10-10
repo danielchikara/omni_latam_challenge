@@ -50,8 +50,8 @@ class Order(models.Model):
     order_status = models.CharField(choices=STATUS_CHOICE,
                                     max_length=2, null=True, blank=True)
     total_order = models.DecimalField(
-        max_digits=12, decimal_places=2)
-
+        max_digits=12, decimal_places=2,default=0)
+    is_active = models.BooleanField(default=True)
 
 class Product (models.Model):
     product_name = models.CharField(max_length=150)

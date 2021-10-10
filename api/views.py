@@ -99,6 +99,7 @@ class DetailProductView(generics.RetrieveAPIView):
     serializer_class = ProductSerializer
     queryset = Product.objects.filter(is_active=True)
 
+
 class ListProductView(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_class = (TokenAuthentication)
@@ -116,3 +117,55 @@ class DeleteProductView(generics.DestroyAPIView):
         instance.is_active = False
         instance.save()
         return Response({'msg': "Se ha  borrado el producto"}, status=200)
+
+
+# Crud  Order
+class CreateOrder(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_class = (TokenAuthentication)
+    serializer_class = OrderCreateSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+        return Response({'msg': "Orden creada"}, status=201)
+
+    def create(self, request):
+        return Response({'msg': "Orden creada"}, status=201)
+
+
+class DetailOrderView(generics.RetrieveAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_class = (TokenAuthentication)
+    serializer_class = OrderReadSerializer
+
+    def get_queryset(self):
+        queryset = Order.objects.filter(user=self.request.user)
+        return queryset
+
+
+class UpdateOrderView(generics.UpdateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_class = (TokenAuthentication)
+    serializer_class = OrderUpdateSerializer
+
+    def get_queryset(self):
+        queryset = Order.objects.filter(user=self.request.user)
+        return queryset
+
+
+class DeleteOrderView(generics.DestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_class = (TokenAuthentication)
+
+    def get_queryset(self):
+        queryset = Order.objects.filter(user=self.request.user,is_active=True)
+        return queryset
+
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.is_active = False
+        instance.save()
+        return Response({'msg': "Se ha  borrado la  orden"}, status=200)
+
+

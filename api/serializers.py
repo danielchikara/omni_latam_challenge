@@ -80,6 +80,22 @@ class LoginSerializer(serializers.Serializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ('product_name', 'price','is_active')
+        fields = ('product_name', 'price', 'is_active')
 
 
+class OrderCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        exclude = ('id', 'user', 'order_date', 'order_status',
+                   'total_order',)
+
+class OrderReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ('id', 'user', 'order_date', 'order_status',
+                   'total_order',)
+
+class OrderUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ('order_status',)
