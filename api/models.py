@@ -57,6 +57,7 @@ class Product (models.Model):
     product_name = models.CharField(max_length=150)
     price = models.DecimalField(
         max_digits=12, decimal_places=2)
+    is_active = models.BooleanField(default=True)
 
 
 class OrderProduct (models.Model):

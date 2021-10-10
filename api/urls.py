@@ -7,13 +7,18 @@ urlpatterns = [
     #  User
     path('register/client/', RegisterClientView.as_view()),
     path('update/client/', UpdateInfoClientView.as_view()),
-    path('info/client/', GetInfoClientView.as_view()),
+    path('detail/client/', GetInfoClientView.as_view()),
     path('delete/client/', DeleteUserView.as_view()),
     #Login and logout
     path('login/client/', LoginView.as_view()),
     path('logout/client/', LogoutView.as_view()),
     # Product
-    
+    path('create/product/', CreateProductView.as_view()),
+    path('update/product/<int:pk>/', UpdateProductView.as_view()),
+    path('detail/product/<int:pk>/', DetailProductView.as_view()),
+    path('list/product/', ListProductView.as_view()),
+    path('delete/product/<int:pk>/', DeleteProductView.as_view()),
+
 
 
 ]

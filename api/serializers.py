@@ -74,3 +74,12 @@ class LoginSerializer(serializers.Serializer):
             msg = 'Se deben enviar el email y la contraseña.'
             raise exceptions.ValidationError(msg)
         return data
+
+
+# Crud Product
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ('product_name', 'price','is_active')
+
+

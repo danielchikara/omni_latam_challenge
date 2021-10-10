@@ -8,6 +8,7 @@ from api.models import *
 # Create your views here.
 
 
+# User
 class RegisterClientView(APIView):
 
     def post(self, request):
@@ -76,3 +77,42 @@ class LogoutView(APIView):
     def post(self, request):
         request.user.auth_token.delete()
         return Response(status=204)
+
+
+# Crud Product
+class CreateProductView(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    authentication_class = (TokenAuthentication)
+    serializer_class = ProductSerializer
+
+
+class UpdateProductView(generics.UpdateAPIView):
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    authentication_class = (TokenAuthentication)
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+
+
+class DetailProductView(generics.RetrieveAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_class = (TokenAuthentication)
+    serializer_class = ProductSerializer
+    queryset = Product.objects.filter(is_active=True)
+
+class ListProductView(generics.ListAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_class = (TokenAuthentication)
+    serializer_class = ProductSerializer
+    queryset = Product.objects.filter(is_active=True).order_by('id')
+
+
+class DeleteProductView(generics.DestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    authentication_class = (TokenAuthentication)
+    queryset = Product.objects.filter(is_active=True)
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.is_active = False
+        instance.save()
+        return Response({'msg': "Se ha  borrado el producto"}, status=200)
