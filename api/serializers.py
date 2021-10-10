@@ -7,40 +7,26 @@ from api.utils import get_or_none
 from api.models import *
 
 
-class TokenSerializer(serializers.Serializer):
-    token = serializers.CharField()
-
-    def validate(self, data):
-        key_token = data.get("token", "")
-        if key_token:
-            token = get_or_none(Token, key=key_token)
-            if token:
-                data["user"] = token.user
-            else:
-                msg = 'El token es inválido.'
-                raise exceptions.ValidationError(msg)
-        else:
-            msg = 'Se debe enviar el token.'
-            raise exceptions.ValidationError(msg)
-        return data
-
-
 class ClientRegisterSerializer(serializers.Serializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
+    password_confirmation = serializers.CharField(required=True)
 
     def validate(self, data):
         email = data.get("email", None)
         password = data.get("password", None)
+        password_confirmation = data.get("password_confirmation", None)
         first_name = data.get("first_name", None)
         last_name = data.get("last_name", None)
         user = get_or_none(User, email=email)
-        print(user,"asdasdadada")
         if user:
             msg = "Este correo electrónico ya está en uso."
             raise exceptions.ValidationError(msg)
+        if password != password_confirmation:
+            msg = "Las contraseñas no coinciden"
+
         else:
             user = User.objects.create_user(first_name=first_name, last_name=last_name,
                                             email=email, password=password)

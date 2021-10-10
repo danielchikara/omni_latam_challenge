@@ -18,7 +18,7 @@ class RegisterClientView(APIView):
         code = 400
         if user:
             success = True
-            code = 200
+            code = 201
         return Response({"success": success}, status=code)
 
 
