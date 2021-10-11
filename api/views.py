@@ -127,7 +127,6 @@ class CreateOrder(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-        return Response({'msg': "Orden creada"}, status=201)
 
     def create(self, request):
         return Response({'msg': "Orden creada"}, status=201)
@@ -158,9 +157,8 @@ class DeleteOrderView(generics.DestroyAPIView):
     authentication_class = (TokenAuthentication)
 
     def get_queryset(self):
-        queryset = Order.objects.filter(user=self.request.user,is_active=True)
+        queryset = Order.objects.filter(user=self.request.user, is_active=True)
         return queryset
-
 
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -168,4 +166,67 @@ class DeleteOrderView(generics.DestroyAPIView):
         instance.save()
         return Response({'msg': "Se ha  borrado la  orden"}, status=200)
 
+
+# Crud OrderProduct
+class CreateOrderProductView(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_class = (TokenAuthentication)
+    serializer_class = OrderProductSerializer
+
+    def perform_create(self, serializer):
+        print("serializer", serializer.validated_data)
+        product = serializer.validated_data['product']
+        order = serializer.validated_data['order']
+        total_price_order_product = float(product.price) * \
+            float(serializer.validated_data['amount'])
+        order.total_order = float(order.total_order) + \
+            total_price_order_product
+        serializer.save(price_per_unit=product.price,
+                        total_price=total_price_order_product)
+
+
+class DetailOrderProductView(generics.RetrieveAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_class = (TokenAuthentication)
+    serializer_class = OrderProductReadSerializer
+
+    def get_queryset(self):
+        queryset = OrderProduct.objects.filter(
+            is_active=True, order__user=self.request.user)
+        return queryset
+
+
+class UpdateOrderProductView(generics.UpdateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_class = (TokenAuthentication)
+    serializer_class = OrderProductReadSerializer
+
+    def get_queryset(self):
+        queryset = OrderProduct.objects.filter(
+            is_active=True, order__user=self.request.user)
+        return queryset
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"order_product": serializer.data}, status=200)
+
+
+class DeleteOrderProductView(generics.DestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_class = (TokenAuthentication)
+
+    def get_queryset(self):
+        queryset = OrderProduct.objects.filter(
+            user=self.request.user, is_active=True)
+        return queryset
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.is_active = False
+        instance.save()
+        return Response({'msg': "Se ha  borrado con exito"}, status=200)
 

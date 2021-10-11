@@ -50,8 +50,11 @@ class Order(models.Model):
     order_status = models.CharField(choices=STATUS_CHOICE,
                                     max_length=2, null=True, blank=True)
     total_order = models.DecimalField(
-        max_digits=12, decimal_places=2,default=0)
+        max_digits=12, decimal_places=2, default=0)
+    paid_value_order = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0.00)
     is_active = models.BooleanField(default=True)
+
 
 class Product (models.Model):
     product_name = models.CharField(max_length=150)
@@ -67,23 +70,21 @@ class OrderProduct (models.Model):
         Order, related_name="order_products", on_delete=models.CASCADE)
     amount = models.DecimalField(
         max_digits=12, decimal_places=2)
-    PENDING = 'pe'
-    PAYMENT = 'pa'
-    PRODUCTION = 'pr'
     ROUTE = 'ro'
     DELIVERED = 'de'
     STATUS_CHOICE = (
-        (PENDING, 'Pendiente de pago'),
-        (PAYMENT, 'Pago'),
         (ROUTE, 'En camino'),
         (DELIVERED, 'Entregado'),
     )
     order_product_status = models.CharField(choices=STATUS_CHOICE,
                                             max_length=2, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
     price_per_unit = models.DecimalField(max_digits=12, decimal_places=2)
     total_price = models.DecimalField(max_digits=12, decimal_places=2)
 
 
 class Payment(models.Model):
-    user = models.ForeignKey(User, related_name="user_payments", on_delete=models.CASCADE)
-    order = models.ManyToManyField(Order)
+    user = models.ForeignKey(
+        User, related_name="user_payments", on_delete=models.CASCADE)
+    order = models.ManyToManyField(Order, related_name="payment_orders")
+    paid_value = models.DecimalField(max_digits=12, decimal_places=2,default=0.00)

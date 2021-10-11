@@ -76,26 +76,47 @@ class LoginSerializer(serializers.Serializer):
         return data
 
 
-# Crud Product
+# Product Serializer
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('product_name', 'price', 'is_active')
 
 
+# Order Serializers
 class OrderCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         exclude = ('id', 'user', 'order_date', 'order_status',
                    'total_order',)
 
+
 class OrderReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('id', 'user', 'order_date', 'order_status',
-                   'total_order',)
+                  'total_order',)
+
 
 class OrderUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('order_status',)
+
+
+#Order Product Serializers
+
+class OrderProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderProduct
+        exclude = ('order_product_status','price_per_unit','total_price')
+
+class OrderProductReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderProduct
+        fields = '__all__'
+
+class OrderProductUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderProduct
+        exclude = ('order_product_status',)
