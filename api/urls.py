@@ -28,7 +28,8 @@ urlpatterns = [
     path('detail/order-product/<int:pk>/', DetailOrderProductView.as_view()),
     path('update/order-product/<int:pk>/', UpdateOrderProductView.as_view()),
     path('delete/order-product/<int:pk>/', DeleteOrderProductView.as_view()),
-    
+    #Payment
+    path('create/payment/',CreatePaymentView.as_view())
 
 
 ]

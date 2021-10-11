@@ -230,3 +230,20 @@ class DeleteOrderProductView(generics.DestroyAPIView):
         instance.save()
         return Response({'msg': "Se ha  borrado con exito"}, status=200)
 
+
+class CreatePaymentView(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_class = (TokenAuthentication)
+    serializer_class = PaymentSerializer
+
+    def perform_create(self, serializer):
+        ids_order = serializer.validated_data['order']
+        paid_value = serializer.validated_data['paid_value']
+        for id_order in ids_order:
+            if paid_value >0 and id_order.total_order > 0:
+                if id_order.total_order <= paid_value:
+                    id_order.paid_value_order = id_order.total_order
+                    paid_value =   paid_value - id_order.total_order
+                else:
+                    id_order.total_order= id_order.total_order - paid_value
+        serializer.save(user=self.request.user)

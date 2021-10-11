@@ -120,3 +120,8 @@ class OrderProductUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderProduct
         exclude = ('order_product_status',)
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        exclude = ('user',)
